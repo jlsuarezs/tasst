@@ -1,0 +1,103 @@
+<!-- Main container -->
+<main class="main-content">
+
+  <!--
+  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+  | Bot
+  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+  !-->
+  <section class="section bg-white my-1 py-0">
+    <div class="container" @logoAnimation>
+      <div class="row align-items-center pb-5">
+        <div class="col-12 text-center">
+          <h2 class="fw-300">Welcome to
+            <img class="logo-default" src="assets/img/logo-dark.jpg" alt="TASSOMAI - Logo" class="ts-welcome">Tassomai
+          </h2>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 mx-auto">
+          <div #ts class="ts ts-container ts-bot-wrapper" style="overflow: visible;" [@listAnimation]="bot.length">
+
+            <ng-template ngFor let-i="index" let-item [ngForOf]="bot">
+
+              <div class="ts-messages-container">
+                <div *ngIf="!item.typing && item.message" class="ts-message">
+                  <div class="ts-message-content text"
+                    [ngClass]="{'ts-from-bot': item.from === 'bot', 'ts-from-me': item.from === 'me'}">
+                    <span [innerHTML]="(item.innerHTML || item.message) | sanitizeHtml">{{ item.message }}</span>
+                    <img *ngIf="item.image && item.image !== ''" class="ts-message-content-image" [src]="item.image"
+                      alt="VWT - BOT">
+                  </div>
+                </div>
+
+                <div *ngIf="item.typing" class="ts-message">
+                  <div class="ts-message-content ts-loading">
+                    <i class="ts-dot"></i>
+                    <i class="ts-dot"></i>
+                    <i class="ts-dot"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="!item.typing && item.input" class="ts-actions-container">
+                <div class="row">
+                  <div class="col-12">
+                    <!-- #frm (ngSubmit)="onAction(i, item.field, botInput.value)" -->
+                    <form class="ts-actions-text">
+                      <i class="ts-icon ts-action-text-icon" [ngClass]="item.icon"></i>
+                      <input #botInput [type]="item.type" [placeholder]="item.placeholder" [size]="item.size"
+                        [attr.minlength]="item.minlength" [attr.maxlength]="item.maxlength || 256"
+                        [attr.pattern]="item.pattern" (keyup)="onKeyUp(botInput, btnSubmit);"
+                        class="ts-actions-text-input" autofocus="autofocus" required>
+                      <button #btnSubmit type="button" role="none" (click)="onAction(i, item.field, botInput.value)"
+                        class="ts-actions-buttons-button mt-2 mx-2 mb-2">
+                        <span>NEXT</span>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="!item.typing && (item.actions && item.actions.length > 0)"
+                class="container ts-actions-container">
+                <div class="row">
+                  <div *ngFor="let action of item.actions" class="col-12 ts-actions-buttons">
+                    <button *ngIf="!action.innerHTML" (click)="onAction(i, item.field, action);" type="button"
+                      class="ts-actions-buttons-button mx-2 mb-2">
+                      <i [class]="action.icon"></i>
+                      {{ action.hideCaption ? '':action.caption }}
+                    </button>
+
+                    <button *ngIf="action.innerHTML" (click)="onAction(i, item.field, action);"
+                      [innerHTML]="(action.innerHTML || action.caption) | sanitizeHtml" type="button"
+                      class="ts-actions-buttons-button mx-2 mb-2">
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </ng-template>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- Hack, for now -->
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<!-- Scroll to bottom section -->
+<div id="section-end">&nbsp;</div>
